@@ -32,9 +32,9 @@
             >
 			
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="cid" label="ID" width="55" align="center"></el-table-column>
+                <el-table-column prop="uid" label="ID" width="55" align="center"></el-table-column>
                 <el-table-column prop="name" label="用户名"></el-table-column>
-                <el-table-column label="账户余额">
+<!--                <el-table-column label="账户余额">
                     <template slot-scope="scope">￥{{scope.row.money}}</template>
                 </el-table-column>
                 <el-table-column label="头像(查看大图)" align="center">
@@ -45,8 +45,8 @@
                             :preview-src-list="[scope.row.thumb]"
                         ></el-image>
                     </template>
-                </el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
+                </el-table-column> -->
+                <el-table-column prop="title" label="标题"></el-table-column>
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag
@@ -55,7 +55,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="date" label="注册时间"></el-table-column>
+                <el-table-column prop="editTime" label="修改时间"></el-table-column>
 				<!-- 操作先置后 -->
                <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -87,12 +87,12 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="用户名">
-                    <el-input v-model="form.name"></el-input>
+            <el-form ref="form" :data="form" label-width="70px">
+                <el-form-item label="文章标题">
+                    <el-input v-model="form.title"></el-input>
                 </el-form-item>
-                <el-form-item label="地址">
-                    <el-input v-model="form.address"></el-input>
+                <el-form-item label="内容">
+                    <el-input v-model="form.summary"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -115,6 +115,7 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
+			summary: '',
 			page: {},
             tableData: [],
             multipleSelection: [],
@@ -153,6 +154,10 @@ export default {
 				console.log(this.page)
 			})
 		},
+		//修改后台文章数据
+		editArticle: function(){
+			
+		},
         // 触发搜索按钮
         handleSearch() {
             this.$set(this.query, 'pageIndex', 1);
@@ -185,16 +190,16 @@ export default {
             this.multipleSelection = [];
         },
         // 编辑操作
-        handleEdit(index, row) {
+        handleEdit(index, form) {
             this.idx = index;
-            this.form = row;
+            this.form = form;
+			console.log(form)
             this.editVisible = true;
         },
         // 保存编辑
         saveEdit() {
             this.editVisible = false;
-            this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-            this.$set(this.tableData, this.idx, this.form);
+            this.$message.success(`修改第 ${this.idx + 1} 篇成功`);
         },
         // 分页导航
         handlePageChange(val) {
