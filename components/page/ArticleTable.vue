@@ -147,7 +147,7 @@ export default {
 			const axios = require("axios");
 			axios.get("http://localhost:8763/article/PageAllArticleOrCon",{
 				params: {
-					uid: 10
+					uid: 6
 				}
 			}).then((response) =>{
 				this.page = response.data;

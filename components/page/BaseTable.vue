@@ -23,7 +23,7 @@
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
             <el-table
-                :data="tableData"
+                :data="userList"
                 border
                 class="table"
                 ref="multipleTable"
@@ -31,22 +31,21 @@
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="name" label="用户名"></el-table-column>
-                <el-table-column label="账户余额">
-                    <template slot-scope="scope">￥{{scope.row.money}}</template>
+                <el-table-column prop="id" label="编号" width="55" align="center"></el-table-column>
+                <el-table-column prop="userName" label="用户名"></el-table-column>
+                <el-table-column prop="nickName" label="昵称">
                 </el-table-column>
                 <el-table-column label="头像(查看大图)" align="center">
                     <template slot-scope="scope">
                         <el-image
                             class="table-td-thumb"
-                            :src="scope.row.thumb"
-                            :preview-src-list="[scope.row.thumb]"
+                            :src="scope.row.userFace"
+                            :preview-src-list="[scope.row.userFace]"
                         ></el-image>
                     </template>
                 </el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
-                <el-table-column label="状态" align="center">
+                <el-table-column prop="email" label="email"></el-table-column>
+                <el-table-column prop="enabled" label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag
                             :type="scope.row.state==='成功'?'success':(scope.row.state==='失败'?'danger':'')"
@@ -54,7 +53,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="date" label="注册时间"></el-table-column>
+                <el-table-column prop="regTime" label="注册时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -103,7 +102,9 @@
 
 <script>
 import { fetchData } from '../../api/index';
+var axios = require('axios')
 export default {
+	
     name: 'basetable',
     data() {
         return {
@@ -113,7 +114,18 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [],
+            userList: [{	
+					id:'',
+					userName:'',
+					nickName:'',
+					password:'',
+					enabled:'',
+					email:'',
+					userFace:'',
+					regTime:'',
+					role:''
+				}
+			],
             multipleSelection: [],
             delList: [],
             editVisible: false,
@@ -127,6 +139,20 @@ export default {
         this.getData();
     },
     methods: {
+		//
+		getUserList: function() {
+			axios.get('http://localhost:8762/login/pageUserByCondition')
+				.then(response => {
+					var userList = response.data.list;
+					console.log(userList);
+					if (userList) {
+						this.userList = userList
+					}
+				}, response => {
+					console.log(response);
+					alert("服务器未打开！")
+				});
+		},
         // 获取 easy-mock 的模拟数据
         getData() {
             fetchData(this.query).then(res => {
@@ -183,7 +209,10 @@ export default {
             this.$set(this.query, 'pageIndex', val);
             this.getData();
         }
-    }
+    },
+	created() {
+		this.getUserList()
+	}
 };
 </script>
 
