@@ -76,9 +76,13 @@ export default {
                     index: '3',
                     title: '文章管理',
                     subs: [
+						{
+							index: 'articletable',
+							title: '文章列表'
+						},
                         {
                             index: 'form',
-                            title: ''
+                            title: '文章提交'
                         },
                         {
                             index: '3-2',

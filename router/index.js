@@ -34,10 +34,15 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
                     meta: { title: 'tab选项卡' }
                 },
+				{
+				    path: '/articletable',
+				    component: () => import(/* webpackChunkName: "tabs" */ '../components/page/ArticleTable.vue'),
+				    meta: { title: '文章列表' }
+				},
                 {
                     path: '/form',
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
-                    meta: { title: '文章列表' }
+                    meta: { title: '文章提交表单' }
                 },
                 {
                     // 富文本编辑器组件
