@@ -77,8 +77,8 @@
                 <el-pagination
                     background
                     layout="total, prev, pager, next"
-                    :current-page="query.pageIndex"
-                    :page-size="query.pageSize"
+                    :current-page="pageNum"
+                    :page-size="5"
                     :total="pageTotal"
                     @current-change="handlePageChange"
                 ></el-pagination>
@@ -115,13 +115,14 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-			summary: '',
+			uid: localStorage.getItem('id'),
 			page: {},
             tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
             pageTotal: 0,
+			pageNum: 1,
             form: {},
             idx: -1,
             id: -1
@@ -147,10 +148,12 @@ export default {
 			const axios = require("axios");
 			axios.get("http://localhost:8763/article/PageAllArticleOrCon",{
 				params: {
-					uid: 6
+					uid: this.uid,
+					pageNum: this.pageNum
 				}
 			}).then((response) =>{
 				this.page = response.data;
+				this.pageTotal = this.page.total
 				console.log(this.page)
 			})
 		},
@@ -203,7 +206,8 @@ export default {
         },
         // 分页导航
         handlePageChange(val) {
-            this.$set(this.query, 'pageIndex', val);
+			this.pageNum = val,
+			console.log(this.pageNum),
             this.getData();
         }
     }
