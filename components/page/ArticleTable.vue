@@ -68,7 +68,7 @@
 				</el-form-item>
 				<el-form-item label="内容">
 					<el-input v-model="form.summary"></el-input>
-					<el-button icon="el-icon-edit" @click="gotoSummary">修改文章</el-button>
+					<el-button icon="el-icon-edit" @click="gotoSummary()">修改文章</el-button>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -219,7 +219,19 @@
 					this.getData();
 			},
 			gotoSummary() {
-				this.$router.push('/editor');
+				// axios.get("http://localhost:8762/login/delUser", {
+				// 	params: {
+				// 		id: this.id
+				// 	}
+				// }).then((response) => {
+				// 	console.log(response)
+				// })
+				// this.idx = index;
+				// this.id = form.id;
+				// this.form = JSON.parse(JSON.stringify(form));
+				// console.log(form)
+				// this.editVisible = true;
+				this.$router.push('/markdown');
 			}
 		}
 	};
