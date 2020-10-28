@@ -105,6 +105,7 @@
 
 <script>
 import { fetchData } from '../../api/index';
+var axios = require('axios');
 export default {
     name: 'basetable',
     data() {
@@ -145,7 +146,6 @@ export default {
         }, */
 		//获取后台文章数据
 		getData: function(pageNum, pageSize){
-			const axios = require("axios");
 			axios.get("http://localhost:8763/article/PageAllArticleOrCon",{
 				params: {
 					uid: this.uid,
@@ -159,7 +159,24 @@ export default {
 		},
 		//修改后台文章数据
 		editArticle: function(){
-			
+			axios.get("http://localhost:8763/article/updateArticle",{
+				params: {
+					id: this.id,
+					title: this.page.list[this.idx].title
+				}
+			}).then((response) =>{
+				console.log(response)
+			})
+		},
+		//删除文章
+		deleteArticle: function(){
+			axios.get("http://localhost:8763/article/deleteArticle",{
+				params: {
+					id: this.id
+				}
+			}).then((response) =>{
+				console.log(response)
+			})
 		},
         // 触发搜索按钮
         handleSearch() {
@@ -167,16 +184,20 @@ export default {
             this.getData();
         },
         // 删除操作
-        handleDelete(index, row) {
+        handleDelete(index, form) {
             // 二次确认删除
             this.$confirm('确定要删除吗？', '提示', {
                 type: 'warning'
             })
                 .then(() => {
+					this.id = form.id;
+					this.deleteArticle();
                     this.$message.success('删除成功');
                     this.tableData.splice(index, 1);
                 })
-                .catch(() => {});
+                .catch(() => {
+					this.$message.error('放弃删除');
+				});
         },
         // 多选操作
         handleSelectionChange(val) {
@@ -195,7 +216,8 @@ export default {
         // 编辑操作
         handleEdit(index, form) {
             this.idx = index;
-            this.form = form;
+			this.id = form.id;
+            this.form =JSON.parse(JSON.stringify(form));
 			console.log(form)
             this.editVisible = true;
         },
@@ -203,6 +225,8 @@ export default {
         saveEdit() {
             this.editVisible = false;
             this.$message.success(`修改第 ${this.idx + 1} 篇成功`);
+			this.$set(this.page.list, this.idx, this.form);
+			this.editArticle();
         },
         // 分页导航
         handlePageChange(val) {
