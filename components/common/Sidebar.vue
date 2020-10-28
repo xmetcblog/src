@@ -70,10 +70,10 @@
 									index: 'articlemark',
 									title: '文章修改'
 							},
-							{
+							/* {
 								index: 'form',
 								title: '文章提交'
-							},
+							}, */
 							{
 								index: '3-2',
 								title: '三级菜单',
@@ -87,10 +87,10 @@
 									}
 								]
 							},
-							{
+							/* {
 								index: 'upload',
 								title: '文件上传'
-							}
+							} */
 						]
 					},
 					/*                {
@@ -98,11 +98,11 @@
 					                    index: 'icon',
 					                    title: '自定义图标'
 					                }, */
-					{
+					/* {
 						icon: 'el-icon-pie-chart',
 						index: 'charts',
 						title: 'schart图表'
-					},
+					}, */
 					/*  {
 					      icon: 'el-icon-rank',
 					      index: '6',
