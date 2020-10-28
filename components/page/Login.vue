@@ -77,17 +77,21 @@
 					var user = response.data;
 					console.log(user); 
 					if(user){
-						this.$message.success('登录成功');
-						// window.sessionStorage.setItem("user",user.nickName);
-						localStorage.setItem('ms_username',user.userName);
-						localStorage.setItem('id',user.id);
-						localStorage.setItem('nickName',user.nickName);
-						localStorage.setItem('password',user.password);
-						localStorage.setItem('email',user.email);
-						localStorage.setItem('regTime',user.regTime);
-						localStorage.setItem('role',user.role);
-						localStorage.setItem('userFace',user.userFace);
-						this.$router.push('/');
+						if(user.enabled==0){
+							this.$message.success('此账号已封禁！！！请联系管理员；QQ：1203970760');
+						}else{
+							this.$message.success('登录成功');
+							// window.sessionStorage.setItem("user",user.nickName);
+							localStorage.setItem('ms_username',user.userName);
+							localStorage.setItem('id',user.id);
+							localStorage.setItem('nickName',user.nickName);
+							localStorage.setItem('password',user.password);
+							localStorage.setItem('email',user.email);
+							localStorage.setItem('regTime',user.regTime);
+							localStorage.setItem('role',user.role);
+							localStorage.setItem('userFace',user.userFace);
+							this.$router.push('/');
+						}
 					}else{
 						alert("账号密码出错");
 					}
