@@ -9,6 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
+				<el-button type="primary" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
                 <el-button
                     type="primary"
                     icon="el-icon-delete"
@@ -22,18 +23,14 @@
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button> -->
             </div>
-            <el-table
-                :data="page.list"
-                border
-                class="table"
-                ref="multipleTable"
-                header-cell-class-name="table-header"
-                @selection-change="handleSelectionChange"
-            >
+			<el-table :data="page.list" border class="table" ref="multipleTable" header-cell-class-name="table-header"
+			 @selection-change="handleSelectionChange">
 			
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column prop="uid" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="name" label="用户名"></el-table-column>
+				<el-table-column label="用户名">
+					{{nickName}}
+				</el-table-column>
 <!--                <el-table-column label="账户余额">
                     <template slot-scope="scope">￥{{scope.row.money}}</template>
                 </el-table-column>
@@ -49,9 +46,7 @@
                 <el-table-column prop="title" label="标题"></el-table-column>
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
-                        <el-tag
-                            :type="scope.row.state==='成功'?'success':(scope.row.state==='失败'?'danger':'')"
-                        >{{scope.row.state}}</el-tag>
+						<el-tag :type="scope.row.state==='成功'?'success':(scope.row.state==='失败'?'danger':'')">{{scope.row.state}}</el-tag>
                     </template>
                 </el-table-column>
 
@@ -59,29 +54,14 @@
 				<!-- 操作先置后 -->
                <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="handleEdit(scope.$index, scope.row)"
-                        >编辑</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-delete"
-                            class="red"
-                            @click="handleDelete(scope.$index, scope.row)"
-                        >删除</el-button>
+						<el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+						<el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="pageNum"
-                    :page-size="5"
-                    :total="pageTotal"
-                    @current-change="handlePageChange"
-                ></el-pagination>
+				<el-pagination background layout="total, prev, pager, next" :current-page="pageNum" :page-size="5" :total="pageTotal"
+				 @current-change="handlePageChange"></el-pagination>
             </div>
         </div>
 
@@ -105,12 +85,15 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
+	import {
+		fetchData
+	} from '../../api/index';
 var axios = require('axios');
 export default {
     name: 'basetable',
     data() {
         return {
+				role: localStorage.getItem('role'),
             query: {
                 address: '',
                 name: '',
@@ -118,6 +101,7 @@ export default {
                 pageSize: 10
             },
 			uid: localStorage.getItem('id'),
+				nickName: localStorage.getItem('nickName'),
 			page: {},
             tableData: [],
             multipleSelection: [],
@@ -146,12 +130,15 @@ export default {
             });
         }, */
 		//获取后台文章数据
-		getData: function(pageNum, pageSize){
-			axios.get("http://localhost:8763/article/PageAllArticleOrCon",{
+		getData: function(pageNum, pageSize){s
+				var role = this.role == 0 ? false : true;
+				console.log(role);
+				axios.get("http://localhost:8763/article/PageAllArticleOrCon" + "?pageNum=" + this.pageNum, {
+					if(role){
 				params: {
-					uid: this.uid,
-					pageNum: this.pageNum
+							id: this.id;
 				}
+					}
 			}).then((response) =>{
 				this.page = response.data;
 				this.pageTotal = this.page.total
@@ -175,6 +162,7 @@ export default {
 				params: {
 					id: this.id
 				}
+
 			}).then((response) =>{
 				console.log(response)
 			})
@@ -232,12 +220,17 @@ export default {
         // 分页导航
         handlePageChange(val) {
 			this.pageNum = val,
+					console.log(this.pageNum),
 			console.log(this.pageNum),
             this.getData();
         },
 		gotoSummary(){
 			this.$router.push('/editor');
+<<<<<<< .mine
 		}
+=======
+			}
+>>>>>>> .theirs
     }
 };
 </script>
@@ -255,16 +248,20 @@ export default {
     width: 300px;
     display: inline-block;
 }
+
 .table {
     width: 100%;
     font-size: 14px;
 }
+
 .red {
     color: #ff0000;
 }
+
 .mr10 {
     margin-right: 10px;
 }
+
 .table-td-thumb {
     display: block;
     margin: auto;
