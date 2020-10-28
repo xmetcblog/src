@@ -10,9 +10,9 @@
 		<div class="container">
 			<div class="handle-box">
 				<el-button type="primary" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
-				<el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-					<el-option key="1" label="广东省" value="广东省"></el-option>
-					<el-option key="2" label="湖南省" value="湖南省"></el-option>
+				<el-select v-model="query.address" placeholder="是否可用" class="handle-select mr10" @change="selectUsers">
+					<el-option key="1" label="正常用户" value="1"></el-option>
+					<el-option key="2" label="封禁用户" value="0"></el-option>
 				</el-select>
 				<el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
 				<el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
@@ -129,7 +129,7 @@
 					}
 				}).then(response => {
 					var userList = response.data.list;
-					var page = response.data
+					var page = response.data;
 					console.log(userList);
 					if (userList) {
 						this.userList = userList,
@@ -144,8 +144,12 @@
 			//改变表格中的el-switch开关状态
 			changeStatus(e, row, index) { //e表示el-switch的状态（true，false）
 				//请求接口
-				axios.post('http://localhost:8762/login/UpUserState', {
-					enabled: e ? 1 : 0
+				console.log(e);
+				axios.get('http://localhost:8762/login/UpUserState', {
+					params: {
+						id: row.id,
+						enabled: e,
+					}
 				}).then(res => {
 					console.log('切换状态成功');
 					//TODO ：刷新列表数据
@@ -154,7 +158,32 @@
 					console.log('切换状态失败');
 					let newData = row;
 					newData.status = newData.status === 1 ? 0 : 1; //恢复 原状态
-					this.tableData[index] = newData;
+					this.userList[index] = newData;
+				})
+			},
+			//查找
+			selectUsers(value) {
+				//请求接口
+				console.log("enabled状态"+value)
+				axios.get('http://localhost:8762/login/pageUserByCondition', {
+					params: {
+						enabled: value,
+					}
+				}).then(res => {
+					var userList = res.data.list;
+					var page = res.data;
+					console.log(userList);
+					if (userList) {
+						this.userList = userList,
+						this.pageTotal = page.total,
+						this.pageNum = page.pageNum
+					}
+					
+				}).catch(err => {
+					console.log('切换状态失败');
+					let newData = row;
+					newData.status = newData.status === 1 ? 0 : 1; //恢复 原状态
+					this.userList[index] = newData;
 				})
 			},
 

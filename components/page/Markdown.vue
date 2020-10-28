@@ -4,13 +4,22 @@
 			<el-breadcrumb separator="/">
 				<el-breadcrumb-item><i class="el-icon-lx-calendar"></i> 表单</el-breadcrumb-item>
 				<el-breadcrumb-item>markdown编辑器</el-breadcrumb-item>
+				<br />
+				<div align="center">
+				<el-select v-model="categoryList.id" placeholder="请选择文章栏目" style="width: 150px;">
+					<el-option v-for="item in categoryList" :key="item.id" :label="item.cateName" :value="item.id">
+					</el-option>
+				</el-select>
+				<el-input v-model="articleData.title" pla
+				ceholder="请输入标题..." style="width: 400px;margin-left: 10px"></el-input>
+				</div>
 			</el-breadcrumb>
 		</div>
 		<div class="container">
-			<div class="plugins-tips">
-				mavonEditor：基于Vue的markdown编辑器。
-				访问地址：<a href="https://github.com/hinesboy/mavonEditor" target="_blank">mavonEditor</a>
-			</div>
+			<!--  <div class="plugins-tips">
+                mavonEditor：基于Vue的markdown编辑器。
+                访问地址：<a href="https://github.com/hinesboy/mavonEditor" target="_blank">mavonEditor</a>
+            </div> -->
 			<mavon-editor v-model="content" ref="md" @imgAdd="$imgAdd" @change="change" style="min-height: 600px" />
 			<el-button class="editor-btn" type="primary" @click="submit">提交</el-button>
 		</div>
@@ -27,48 +36,33 @@
 		name: 'markdown',
 		data: function() {
 			return {
+				articleData: {
+					id: '',
+					title:'',
+					mdContent: '',
+					htmlContent: '',
+					summary: '',
+					cid: '',
+					uid: '',
+					publishDate: '',
+					editTime: '',
+					state: '1',
+					pageView: ''
+				},
+				categoryList: [{
+					id: '',
+					cateName: '',
+					date: ''
+				}],
 				content: '',
 				html: '',
-				configs: {},
-				aid: localStorage.getItem('aid'),
-				article: {},
-				id: -1,
-				mdContent: '',
-				htmlContent: ''
+				configs: {}
 			}
 		},
 		components: {
 			mavonEditor
 		},
-		created: function() {
-			this.getData();
-		},
 		methods: {
-			//根据文章id查询文章
-			getData: function(pageNum, pageSize) {
-				axios.get("http://localhost:8763/article/findArticleById", {
-					params: {
-						id: this.aid
-					}
-				}).then((response) => {
-					this.article = response.data;
-					this.content = this.article.mdContent
-					console.log(this.article)
-				})
-			},
-			updateArticle: function() {
-				console.log(this.content);
-				console.log(this.html);				
-				axios.get("http://localhost:8763/article/updateArticleById", {
-					params: {
-						id: this.aid,
-						mdContent: this.content,
-						htmlContent: this.html
-					}
-				}).then((response) => {
-					console.log(response)
-				})
-			},
 			// 将图片上传到服务器，返回地址替换到md中
 			$imgAdd(pos, $file) {
 				var formdata = new FormData();
@@ -89,12 +83,42 @@
 				// render 为 markdown 解析后的结果
 				this.html = render;
 			},
-			submit() {
-				console.log(this.content);
-				console.log(this.html);
-				this.updateArticle();
-				this.$message.success('提交成功！');
+			submit: function() {
+				axios.get('http://localhost:8763/article/addArticle', {
+						params: {
+							title:this.articleData.title,
+							mdContent: this.content,
+							htmlContent: this.html,
+							cid:this.categoryList.id,
+							state: this.articleData.state
+						}
+					})
+					.then(response => {
+						console.log(this.content);
+						console.log(this.html);
+						this.$message.success('提交成功！');
+					}, response => {
+						console.log(response);
+						alert("服务器未打开！")
+					});
+			},
+			getCategory: function() {
+				axios.get('http://localhost:8763/category/queryCategoryAll')
+					.then(response => {
+						var category = response.data;
+						console.log(category);
+						if (category) {
+							this.categoryList = category
+						}
+					}, response => {
+						console.log(response);
+						alert("服务器未打开！")
+					});
 			}
+		},
+		created() {
+			this.getCategory(),
+			this.getPageAllArticle()
 		}
 	}
 </script>

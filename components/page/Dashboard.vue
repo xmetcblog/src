@@ -57,8 +57,8 @@
 							<div class="grid-content grid-con-2">
 								<i class="el-icon-lx-notice grid-con-icon"></i>
 								<div class="grid-cont-right">
-									<div class="grid-num">321</div>
-									<div>系统消息</div>
+									<div class="grid-num" @click="goWrite()">写文章</div>
+									<!-- <div>系统消息</div> -->
 								</div>
 							</div>
 						</el-card>
@@ -262,6 +262,9 @@
 					const date = new Date(now - (6 - index) * 86400000);
 					item.name = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 				});
+			},
+			goWrite(){
+				this.$router.push('/markdown');
 			}
 			// handleListener() {
 			//     bus.$on('collapse', this.handleBus);
