@@ -130,7 +130,7 @@ export default {
             });
         }, */
 		//获取后台文章数据
-		getData: function(pageNum, pageSize){s
+		getData: function(pageNum, pageSize){
 				var role = this.role == 0 ? false : true;
 				console.log(role);
 				axios.get("http://localhost:8763/article/PageAllArticleOrCon" + "?pageNum=" + this.pageNum, {
@@ -220,17 +220,12 @@ export default {
         // 分页导航
         handlePageChange(val) {
 			this.pageNum = val,
-					console.log(this.pageNum),
 			console.log(this.pageNum),
             this.getData();
         },
 		gotoSummary(){
 			this.$router.push('/editor');
-<<<<<<< .mine
 		}
-=======
-			}
->>>>>>> .theirs
     }
 };
 </script>
@@ -248,20 +243,16 @@ export default {
     width: 300px;
     display: inline-block;
 }
-
 .table {
     width: 100%;
     font-size: 14px;
 }
-
 .red {
     color: #ff0000;
 }
-
 .mr10 {
     margin-right: 10px;
 }
-
 .table-td-thumb {
     display: block;
     margin: auto;

@@ -9,32 +9,31 @@
 		</div>
 		<div class="container">
 			<div class="handle-box">
-				<el-button type="primary" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
                 <el-button
                     type="primary"
                     icon="el-icon-delete"
                     class="handle-del mr10"
                     @click="delAllSelection"
                 >批量删除</el-button>
-				<el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-					<el-option key="1" label="广东省" value="广东省"></el-option>
-					<el-option key="2" label="湖南省" value="湖南省"></el-option>
-				</el-select>
-				<el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
-				<el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-			</div>
+                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
+                    <el-option key="1" label="广东省" value="广东省"></el-option>
+                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                </el-select>
+                <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
+                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+            </div>
 			<el-table :data="userList" border class="table" ref="multipleTable" header-cell-class-name="table-header"
 			 @selection-change="handleSelectionChange">
-				<el-table-column type="selection" width="55" align="center"></el-table-column>
-				<el-table-column prop="id" label="编号" width="55" align="center"></el-table-column>
-				<el-table-column prop="userName" label="用户名"></el-table-column>
-				<el-table-column prop="nickName" label="昵称">
-				</el-table-column>
-				<el-table-column label="头像(查看大图)" align="center">
-					<template slot-scope="scope">
+                <el-table-column type="selection" width="55" align="center"></el-table-column>
+                <el-table-column prop="id" label="编号" width="55" align="center"></el-table-column>
+                <el-table-column prop="userName" label="用户名"></el-table-column>
+                <el-table-column prop="nickName" label="昵称">
+                </el-table-column>
+                <el-table-column label="头像(查看大图)" align="center">
+                    <template slot-scope="scope">
 						<el-image class="table-td-thumb" :src="scope.row.userFace" :preview-src-list="[scope.row.userFace]"></el-image>
 					</template>
-				</el-table-column>
+                </el-table-column>
 				<el-table-column prop="email" label="email"></el-table-column>
 				<el-table-column prop="enabled" label="状态" align="center">
 					<template slot-scope="scope">
@@ -54,22 +53,22 @@
 				<el-pagination background layout="total, prev, pager, next" :current-page="pageNum" :page-size="5" :total="pageTotal"
 				 @current-change="handlePageChange"></el-pagination>
 			</div>
-		</div>
+        </div>
 
-		<!-- 编辑弹出框 -->
-		<el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-			<el-form ref="form" :model="form" label-width="70px">
-				<el-form-item label="用户名">
-					<el-input v-model="form.name"></el-input>
-				</el-form-item>
-				<el-form-item label="地址">
-					<el-input v-model="form.address"></el-input>
-				</el-form-item>
-			</el-form>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="editVisible = false">取 消</el-button>
-				<el-button type="primary" @click="saveEdit">确 定</el-button>
-			</span>
+        <!-- 编辑弹出框 -->
+        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+            <el-form ref="form" :model="form" label-width="70px">
+                <el-form-item label="用户名">
+                    <el-input v-model="form.name"></el-input>
+                </el-form-item>
+                <el-form-item label="地址">
+                    <el-input v-model="form.address"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveEdit">确 定</el-button>
+            </span>
 		</el-dialog>
 	</div>
 </template>
@@ -89,13 +88,13 @@
 					address: '',
 					name: '',
 					pageIndex: 1,
-					pageSize: 10
-				},
-				userList: [{
-					id: '',
-					userName: '',
-					nickName: '',
-					password: '',
+                pageSize: 10
+            },
+            userList: [{	
+					id:'',
+					userName:'',
+					nickName:'',
+					password:'',
 					enabled: '',
 					email: '',
 					userFace: '',
