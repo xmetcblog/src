@@ -16,6 +16,9 @@
 				</el-select>
 				<el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
 				<el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+				<span style="float: right;">
+					<el-button type="primary" @click="dialogVisible  = true">添加用户</el-button>
+				</span>
 			</div>
 			<el-table :data="userList" border class="table" ref="multipleTable" header-cell-class-name="table-header"
 			 @selection-change="handleSelectionChange">
@@ -35,13 +38,8 @@
 						<el-tag :type="scope.row.state==='成功'?'success':(scope.row.state==='失败'?'danger':'')">{{scope.row.state}}</el-tag>
 					</template> -->
 					<template slot-scope="scope">
-						<el-switch 
-						v-model="scope.row.enabled" 
-						active-color="#13ce66" 
-						inactive-color="#ff4949" 
-						:active-value="1"
-						:inactive-value="0" 
-						@change="changeStatus($event,scope.row,scope.$index)" />
+						<el-switch v-model="scope.row.enabled" active-color="#13ce66" inactive-color="#ff4949" :active-value="1"
+						 :inactive-value="0" @change="changeStatus($event,scope.row,scope.$index)" />
 					</template>
 				</el-table-column>
 
@@ -61,17 +59,45 @@
 
 		<!-- 编辑弹出框 -->
 		<el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-			<el-form ref="form" :model="form" label-width="70px">
+			<el-form ref="userList" :model="userList" label-width="70px">
+				<el-input type="hidden" v-model="userList.id"></el-input>
 				<el-form-item label="用户名">
-					<el-input v-model="form.name"></el-input>
+					<el-input v-model="userList.userName"></el-input>
 				</el-form-item>
-				<el-form-item label="地址">
-					<el-input v-model="form.address"></el-input>
+				<el-form-item label="昵称">
+					<el-input v-model="userList.nickName"></el-input>
+				</el-form-item>
+				<el-form-item label="邮箱">
+					<el-input v-model="userList.email"></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="editVisible = false">取 消</el-button>
-				<el-button type="primary" @click="saveEdit">确 定</el-button>
+				<el-button type="primary" @click="saveEdit">提交</el-button>
+			</span>
+		</el-dialog>
+		<!-- 添加弹出框 -->
+		<el-dialog title="添加用户" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-form ref="userList" :model="userList" label-width="70px">
+				<el-form-item label="用户名">
+					<el-input v-model="userList.userName"></el-input>
+				</el-form-item>
+				<el-form-item label="昵称">
+					<el-input v-model="userList.nickName"></el-input>
+				</el-form-item>
+				<el-form-item label="密码" prop="pass">
+				    <el-input type="password" v-model="userList.password" auto-complete="off"></el-input>
+				  </el-form-item>
+				  <el-form-item label="确认密码" prop="checkPass">
+				    <el-input type="password" v-model="userList.checkpassword" auto-complete="off"></el-input>
+				  </el-form-item>
+				<el-form-item label="邮箱">
+					<el-input v-model="userList.email"></el-input>
+				</el-form-item>
+			</el-form>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogVisible = false">取 消</el-button>
+				<el-button type="primary" @click="insertUser()">提交</el-button>
 			</span>
 		</el-dialog>
 	</div>
@@ -88,6 +114,7 @@
 		name: 'basetable',
 		data() {
 			return {
+				dialogVisible: false,
 				query: {
 					address: '',
 					name: '',
@@ -164,7 +191,7 @@
 			//查找
 			selectUsers(value) {
 				//请求接口
-				console.log("enabled状态"+value)
+				console.log("enabled状态" + value)
 				axios.get('http://localhost:8762/login/pageUserByCondition', {
 					params: {
 						enabled: value,
@@ -175,10 +202,10 @@
 					console.log(userList);
 					if (userList) {
 						this.userList = userList,
-						this.pageTotal = page.total,
-						this.pageNum = page.pageNum
+							this.pageTotal = page.total,
+							this.pageNum = page.pageNum
 					}
-					
+
 				}).catch(err => {
 					console.log('切换状态失败');
 					let newData = row;
@@ -244,14 +271,46 @@
 			// 编辑操作
 			handleEdit(index, row) {
 				this.idx = index;
-				this.form = row;
+				this.userList = row;
 				this.editVisible = true;
 			},
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
+
 			// 保存编辑
 			saveEdit() {
 				this.editVisible = false;
 				this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-				this.$set(this.tableData, this.idx, this.form);
+				this.$set(this.userList, this.idx, this.userList);
+				axios.get("http://localhost:8762/login/updateUser", {
+					params: {
+						id: this.userList.id,
+						userName: this.userList.userName,
+						nickName: this.userList.nickName,
+						email: this.userList.email,
+					}
+				}).then((response) => {
+					this.getUserList()
+				})
+			},
+			//添加用户
+			insertUser(){
+				axios.get("http://localhost:8762/login/addUser", {
+					params: {
+						id: this.userList.id,
+						userName: this.userList.userName,
+						nickName: this.userList.nickName,
+						email:this.userList.password,
+						email: this.userList.email,
+					}
+				}).then((response) => {
+					this.getUserList()
+				})
 			},
 			// 分页导航
 			handlePageChange(val) {
