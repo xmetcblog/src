@@ -129,7 +129,7 @@
 					}
 				}).then(response => {
 					var userList = response.data.list;
-					var page = response.data
+					var page = response.data;
 					console.log(userList);
 					if (userList) {
 						this.userList = userList,
@@ -144,8 +144,12 @@
 			//改变表格中的el-switch开关状态
 			changeStatus(e, row, index) { //e表示el-switch的状态（true，false）
 				//请求接口
-				axios.post('http://localhost:8762/login/UpUserState', {
-					enabled: e ? 1 : 0
+				console.log(e);
+				axios.get('http://localhost:8762/login/UpUserState', {
+					params: {
+						id: row.id,
+						enabled: e,
+					}
 				}).then(res => {
 					console.log('切换状态成功');
 					//TODO ：刷新列表数据
@@ -154,7 +158,7 @@
 					console.log('切换状态失败');
 					let newData = row;
 					newData.status = newData.status === 1 ? 0 : 1; //恢复 原状态
-					this.tableData[index] = newData;
+					this.userList[index] = newData;
 				})
 			},
 
