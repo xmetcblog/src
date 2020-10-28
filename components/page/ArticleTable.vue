@@ -125,13 +125,14 @@
 			//获取后台文章数据
 			getData: function(pageNum, pageSize) {
 				var role = this.role == 0 ? false : true;
-				console.log(role);
+				var idd = 0;
+				if(role){
+					idd=this.uid;
+				}
 				axios.get("http://localhost:8763/article/PageAllArticleOrCon" + "?pageNum=" + this.pageNum, {
-					if(role){
 						params: {
-							id: this.id;
+							id: idd
 						}
-					}
 				}).then((response) => {
 					this.page = response.data;
 					this.pageTotal = this.page.total
