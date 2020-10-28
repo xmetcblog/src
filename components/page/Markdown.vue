@@ -36,6 +36,7 @@
 		name: 'markdown',
 		data: function() {
 			return {
+				uid:localStorage.getItem('id'),
 				articleData: {
 					id: '',
 					title:'',
@@ -90,6 +91,7 @@
 							mdContent: this.content,
 							htmlContent: this.html,
 							cid:this.categoryList.id,
+							uid:this.uid,
 							state: this.articleData.state
 						}
 					})
