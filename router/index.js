@@ -39,6 +39,11 @@ export default new Router({
 				    component: () => import(/* webpackChunkName: "tabs" */ '../components/page/ArticleTable.vue'),
 				    meta: { title: '文章列表' }
 				},
+				{
+				    path: '/articlemark',
+				    component: () => import(/* webpackChunkName: "tabs" */ '../components/page/ArticleMark.vue'),
+				    meta: { title: '文章修改' }
+				},
                 {
                     path: '/form',
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),

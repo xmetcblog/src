@@ -66,9 +66,9 @@
 				<el-form-item label="文章标题">
 					<el-input v-model="form.title"></el-input>
 				</el-form-item>
-				<el-form-item label="内容">
+				<el-form-item label="文章总结">
 					<el-input v-model="form.summary"></el-input>
-					<el-button icon="el-icon-edit" @click="gotoSummary">修改文章</el-button>
+					<el-button icon="el-icon-edit" @click="gotoSummary">修改文章内容</el-button>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -219,7 +219,8 @@
 					this.getData();
 			},
 			gotoSummary() {
-				this.$router.push('/editor');
+				localStorage.setItem('aid',this.id);
+				this.$router.push('/articlemark');
 			}
 		}
 	};

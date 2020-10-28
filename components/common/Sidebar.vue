@@ -67,6 +67,10 @@
 								title: '文章列表'
 							},
 							{
+									index: 'articlemark',
+									title: '文章修改'
+							},
+							{
 								index: 'form',
 								title: '文章提交'
 							},
