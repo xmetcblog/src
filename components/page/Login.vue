@@ -78,7 +78,7 @@
 					console.log(user); 
 					if(user){
 						if(user.enabled==0){
-							this.$message.success('此账号已封禁！！！请联系管理员；QQ：1203970760');
+							this.$message.error('此账号已封禁！！！请联系管理员；QQ：1203970760');
 						}else{
 							this.$message.success('登录成功');
 							// window.sessionStorage.setItem("user",user.nickName);

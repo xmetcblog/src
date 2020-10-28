@@ -78,7 +78,7 @@
 				<el-card shadow="hover" style="height:403px;">
 					<div slot="header" class="clearfix">
 						<span>个人文章列表</span>
-						<el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
+						<el-button @click="goWrite()" style="float: right; padding: 3px 0" type="text">添加</el-button>
 					</div>
 					<el-table :show-header="false" :data="articleList" style="width:100%;">
 						<el-table-column width="40">

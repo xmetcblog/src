@@ -27,7 +27,7 @@
 					</el-submenu>
 				</template>
 				<template v-else>
-					<el-menu-item :index="item.index" :key="item.index">
+					<el-menu-item v-if="role==0?true:false" :index="item.index" :key="item.index">
 						<i :class="item.icon"></i>
 						<span slot="title">{{ item.title }}</span>
 					</el-menu-item>
@@ -42,11 +42,16 @@
 	export default {
 		data() {
 			return {
+				role: localStorage.getItem('role'),
 				collapse: false,
 				items: [{
 						icon: 'el-icon-lx-home',
 						index: 'dashboard',
-						title: '系统首页'
+						title: '系统首页',
+						subs: [{
+								index: 'dashboard',
+								title: '首页'
+							}]
 					},
 					{
 						icon: 'el-icon-lx-cascades',
