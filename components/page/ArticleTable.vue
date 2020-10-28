@@ -93,6 +93,7 @@
                 </el-form-item>
                 <el-form-item label="内容">
                     <el-input v-model="form.summary"></el-input>
+					<el-button icon="el-icon-edit"  @click="gotoSummary">修改文章</el-button>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -233,7 +234,10 @@ export default {
 			this.pageNum = val,
 			console.log(this.pageNum),
             this.getData();
-        }
+        },
+		gotoSummary(){
+			this.$router.push('/editor');
+		}
     }
 };
 </script>
